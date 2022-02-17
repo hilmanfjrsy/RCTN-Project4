@@ -6,6 +6,8 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Movies from "./Movies";
+import SkeletonLoad from "./SkeletonLoad";
+
 
 function App() {
   const [listMovie, setListMovie] = useState([]);
@@ -14,7 +16,7 @@ function App() {
   const [search, setSearch] = useState("man");
   const [isLoading, setIsLoading] = useState(false);
   const [totalResult, setTotalResult] = useState(0);
-
+  const arr = [1,2,3,4,5,6,7,8,9,10]
   async function getMovie(s = null) {
     try {
       setIsLoading(true);
@@ -62,9 +64,12 @@ function App() {
   
       <h3 className="p-4">Show your favorite movies</h3>
       <div className="container-grid">
-        {listMovie.map((item, index) => (
+        {isLoading? arr.map((i)=>(<SkeletonLoad key={i}/>)) :listMovie.map((item, index) => (
           <Movies item={item} key={index} />
-        ))}
+        )) }
+        {/* {listMovie.map((item, index) => (
+          <Movies item={item} key={index} />
+        ))} */}
       </div>
       <div class="text-center">
         {isEmpty && <small className="text-muted mt-4 mb-4">{isEmpty}</small>}
