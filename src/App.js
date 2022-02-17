@@ -15,9 +15,9 @@ function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [totalResult, setTotalResult] = useState(0)
 
-  async function getMovie(s = null) {
+  async function getMovie(s = true) {
     try {
-      setIsLoading(true)
+      setIsLoading(s)
       let response = await axios.get(`https://www.omdbapi.com/?s=${search}&page=${page}&apikey=b6ece2b8`)
       console.log(response.data)
       if (response.data.hasOwnProperty('Error')) {
@@ -46,7 +46,7 @@ function App() {
   }
 
   useEffect(() => {
-    getMovie()
+    getMovie(false)
   }, [page])
 
   useEffect(() => {
@@ -58,16 +58,28 @@ function App() {
     <div className='container-fluid'>
       <Header onSearch={(v) => setSearch(v)} />
       <h3 className='p-4'>Show your favorite movies</h3>
-      <div className='container-grid'>
-        {listMovie.map((item, index) => <Movies item={item} key={index} />)}
-      </div>
-      <div class="text-center">
-        {isEmpty && <small className='text-muted mt-4 mb-4'>{isEmpty}</small>}
-        {totalResult != listMovie.length && <button className='btn btn-secondary mb-3 mt-3' onClick={() => setPage((v) => v + 1)}>
-          Load More
-        </button>
-        }
-      </div>
+      {
+        isLoading ?
+          <div className='text-center'>
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+          :
+          <>
+            <div className='container-grid'>
+              {listMovie.map((item, index) => <Movies item={item} key={index} />)}
+            </div>
+            <div class="text-center">
+              {isEmpty && <small className='text-muted mt-4 mb-4'>{isEmpty}</small>}
+              {totalResult != listMovie.length && <button className='btn btn-secondary mb-3 mt-3' onClick={() => setPage((v) => v + 1)}>
+                Load More
+              </button>
+              }
+            </div>
+          </>
+      }
+
       <ToastContainer
         position="top-right"
         autoClose={3000}
