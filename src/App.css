@@ -36,3 +36,16 @@
     transform: rotate(360deg);
   }
 }
+
+.container-grid {
+  padding: 0;
+  margin: auto;
+  /* display: grid; */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  /* grid-template-columns: repeat(6,2fr); */
+  margin: 5px 15px;
+  gap:20px;
+  /* position: relative; */
+}
