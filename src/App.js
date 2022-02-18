@@ -1,44 +1,48 @@
-import logo from './logo.svg';
-import './App.css';
-import Header from './Header';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Movies from './Movies';
+import logo from "./logo.svg";
+import "./App.css";
+import Header from "./Header";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Movies from "./Movies";
+import SkeletonLoad from "./SkeletonLoad";
+
 
 function App() {
-  const [listMovie, setListMovie] = useState([])
-  const [page, setPage] = useState(1)
-  const [isEmpty, setIsEmpty] = useState('')
-  const [search, setSearch] = useState('man')
-  const [isLoading, setIsLoading] = useState(false)
-  const [totalResult, setTotalResult] = useState(0)
-
+  const [listMovie, setListMovie] = useState([]);
+  const [page, setPage] = useState(1);
+  const [isEmpty, setIsEmpty] = useState("");
+  const [search, setSearch] = useState("man");
+  const [isLoading, setIsLoading] = useState(false);
+  const [totalResult, setTotalResult] = useState(0);
+  const arr = [1,2,3,4,5,6,7,8,9,10]
   async function getMovie(s = true) {
     try {
-      setIsLoading(s)
-      let response = await axios.get(`https://www.omdbapi.com/?s=${search}&page=${page}&apikey=b6ece2b8`)
-      console.log(response.data)
-      if (response.data.hasOwnProperty('Error')) {
+      setIsLoading(s);
+      let response = await axios.get(
+        `https://www.omdbapi.com/?s=${search}&page=${page}&apikey=b6ece2b8`
+      );
+      console.log(response.data);
+      if (response.data.hasOwnProperty("Error")) {
         // toast.error(response.data.Error, {
         //   theme: "colored",
         // });
-        setListMovie([])
-        setTotalResult(0)
-        setIsEmpty(response.data.Error)
+        setListMovie([]);
+        setTotalResult(0);
+        setIsEmpty(response.data.Error);
       } else {
-        setIsEmpty('')
-        setTotalResult(response.data.totalResults)
+        setIsEmpty("");
+        setTotalResult(response.data.totalResults);
         if (s) {
-          setListMovie(response.data.Search)
+          setListMovie(response.data.Search);
         } else {
-          setListMovie(listMovie.concat(response.data.Search))
+          setListMovie(listMovie.concat(response.data.Search));
         }
       }
-      setIsLoading(false)
+      setIsLoading(false);
     } catch (error) {
-      setIsLoading(false)
+      setIsLoading(false);
       toast.error(error.message, {
         theme: "colored",
       });
@@ -50,36 +54,34 @@ function App() {
   }, [page])
 
   useEffect(() => {
-    setPage(1)
-    getMovie(true)
-  }, [search])
+    setPage(1);
+    getMovie(true);
+  }, [search]);
 
   return (
-    <div className='container-fluid'>
+    <div className="container-fluid">
       <Header onSearch={(v) => setSearch(v)} />
-      <h3 className='p-4'>Show your favorite movies</h3>
-      {
-        isLoading ?
-          <div className='text-center'>
-            <div class="spinner-border" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
-          </div>
-          :
-          <>
-            <div className='container-grid'>
-              {listMovie.map((item, index) => <Movies item={item} key={index} />)}
-            </div>
-            <div class="text-center">
-              {isEmpty && <small className='text-muted mt-4 mb-4'>{isEmpty}</small>}
-              {totalResult != listMovie.length && <button className='btn btn-secondary mb-3 mt-3' onClick={() => setPage((v) => v + 1)}>
-                Load More
-              </button>
-              }
-            </div>
-          </>
-      }
-
+  
+      <h3 className="p-4">Show your favorite movies</h3>
+      <div className="container-grid">
+        {isLoading? arr.map((i)=>(<SkeletonLoad key={i}/>)) :listMovie.map((item, index) => (
+          <Movies item={item} key={index} />
+        )) }
+        {/* {listMovie.map((item, index) => (
+          <Movies item={item} key={index} />
+        ))} */}
+      </div>
+      <div class="text-center">
+        {isEmpty && <small className="text-muted mt-4 mb-4">{isEmpty}</small>}
+        {totalResult != listMovie.length && (
+          <button
+            className="btn btn-secondary mb-3 mt-3"
+            onClick={() => setPage((v) => v + 1)}
+          >
+            Load More
+          </button>
+        )}
+      </div>
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -89,7 +91,8 @@ function App() {
         rtl={false}
         pauseOnFocusLoss
         draggable
-        pauseOnHover />
+        pauseOnHover
+      />
     </div>
   );
 }
