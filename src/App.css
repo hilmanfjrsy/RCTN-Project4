@@ -46,6 +46,19 @@
   justify-content: center;
   /* grid-template-columns: repeat(6,2fr); */
   margin: 5px 15px;
-  gap:20px;
+  gap: 20px;
   /* position: relative; */
+}
+
+.mt-n1 {
+  margin-right: -0.8rem !important;
+  margin-left: -0.8rem !important;
+}
+
+.tx-1 {
+  color: white;
+}
+
+.mt-n2 {
+  margin-left: -1.2rem !important;
 }
