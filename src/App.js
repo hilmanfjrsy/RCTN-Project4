@@ -17,9 +17,9 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [totalResult, setTotalResult] = useState(0);
   const arr = [1,2,3,4,5,6,7,8,9,10]
-  async function getMovie(s = null) {
+  async function getMovie(s = true) {
     try {
-      setIsLoading(true);
+      setIsLoading(s);
       let response = await axios.get(
         `https://www.omdbapi.com/?s=${search}&page=${page}&apikey=b6ece2b8`
       );
@@ -50,8 +50,8 @@ function App() {
   }
 
   useEffect(() => {
-    getMovie();
-  }, [page]);
+    getMovie(false)
+  }, [page])
 
   useEffect(() => {
     setPage(1);
